@@ -1,16 +1,19 @@
-import { Column, Model, Table} from 'sequelize-typescript';
+import { DataTypes } from 'sequelize';
+import { Column, Model, Table, HasMany } from 'sequelize-typescript';
+import { Product } from 'src/product/product.model';
 
 @Table
 export class User extends Model {
-  @Column
+  @Column({ unique: true, allowNull: false, type: DataTypes.STRING })
   email: string;
 
-  @Column
+  @Column({ unique: true, allowNull: false, type: DataTypes.STRING })
   username: string;
 
-  @Column
+  @Column({ allowNull: false, type: DataTypes.STRING })
   password: string;
 
-  @Column({ defaultValue: false })
+  @Column({ defaultValue: false, type: DataTypes.BOOLEAN })
   isActive: boolean;
+
 }

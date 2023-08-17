@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
-import { Column, Model, Table } from 'sequelize-typescript';
+import { Column, Model, Table, HasMany } from 'sequelize-typescript';
+import { Product } from 'src/product/product.model';
 
 @Table
 export class Category extends Model {
@@ -7,7 +8,6 @@ export class Category extends Model {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
-    primaryKey: true
   })
   name: string;
 }
