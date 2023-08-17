@@ -1,0 +1,28 @@
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+import { Category } from './category/category.model';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
+
+  // Ajouter les catégories si elles n'existent pas
+  const categoriesToAdd = [
+    { name: 'Voiture' },
+    { name: 'Vêtements' },
+    { name: 'Livres' },
+  ];
+
+  for (const categoryData of categoriesToAdd) {
+    const existingCategory = await Category.findOne({
+      where: { name: categoryData.name },
+    });
+
+    if (!existingCategory) {
+      await Category.create(categoryData);
+    }
+  }
+  await app.listen(3000);
+}
+bootstrap();

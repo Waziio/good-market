@@ -1,0 +1,50 @@
+import { Injectable } from '@nestjs/common';
+import { UsersService } from 'src/users/users.service';
+import { SignupDto } from './dto/signupDto';
+import {
+  ConflictException,
+  NotFoundException,
+  HttpException,
+} from '@nestjs/common/exceptions';
+import * as bcrypt from 'bcrypt';
+import { SigninDto } from './dto/signinDto';
+
+@Injectable()
+export class AuthService {
+  constructor(private userService: UsersService) {}
+
+  async signup(signup: SignupDto) {
+    const { email, username, password } = signup;
+    const user = await this.userService.findOneByEmail(email);
+    // If user (email) already exist
+    if (user) throw new ConflictException();
+    const hash = await bcrypt.hash(password, 10);
+    await this.userService.create({
+      email: email,
+      username: username,
+      password: hash,
+    });
+    return { message: 'Success !' };
+  }
+
+  async signin(signin: SigninDto) {
+    const { email, password } = signin;
+    const user = await this.userService.findOneByEmail(email);
+    if (!user) throw new NotFoundException();
+
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) throw new HttpException('Invalid password', 400);
+
+    const connected_user = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      isActive: user.isActive,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+
+    return { user: connected_user };
+  }
+}
