@@ -5,21 +5,20 @@ import { Product } from './product.model';
 
 @Injectable()
 export class ProductService {
-    constructor(@InjectModel(Product) private product: typeof Product) {}
-
+  constructor(@InjectModel(Product) private product: typeof Product) {}
 
   async getAll(getProductsDto: GetProductsDto) {
     const { category, name } = getProductsDto;
-    let filter = {};
+    let filter = { where: {} };
 
     if (category) {
-      filter[category] = category;
+      filter['where'][category] = category;
     }
 
     if (name) {
-      filter[name] = name;
+      filter['where'][name] = name;
     }
 
-    const products = this.product.findAll()
+    return this.product.findAll(filter);
   }
 }
