@@ -2,9 +2,11 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { Category } from './category/category.model';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -12,7 +14,6 @@ async function bootstrap() {
     }),
   );
 
-  // Ajouter les catégories si elles n'existent pas
   const categoriesToAdd = [
     { name: 'Voiture' },
     { name: 'Vêtements' },
