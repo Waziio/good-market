@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { Category } from './category/category.model';
+import { Characteristics } from './characteristics/characteristics.model';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,9 +15,21 @@ async function bootstrap() {
   );
 
   const categoriesToAdd = [
-    { name: 'Voiture' },
-    { name: 'Vêtements' },
-    { name: 'Livres' },
+    {
+      name: 'Voiture',
+      characteristics: [
+        { name: 'Marque', type: 'text' },
+        { name: 'Modèle', type: 'text' },
+        { name: 'Kilométrage', type: 'number' },
+      ],
+    },
+    {
+      name: 'Vêtements',
+      characteristics: [
+        { name: 'Taille', type: 'text' },
+        { name: 'Couleur', type: 'text' },
+      ],
+    },
   ];
 
   for (const categoryData of categoriesToAdd) {
@@ -25,9 +38,19 @@ async function bootstrap() {
     });
 
     if (!existingCategory) {
-      await Category.create(categoryData);
+      const newCategory = await Category.create(categoryData);
+
+      // Ajouter les caractéristiques à la catégorie nouvellement créée
+      for (const characteristic of categoryData.characteristics) {
+        await Characteristics.create({
+          name: characteristic.name,
+          type: characteristic.type,
+          categoryId: newCategory.id,
+        });
+      }
     }
   }
+
   await app.listen(3000);
 }
 bootstrap();

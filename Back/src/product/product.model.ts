@@ -6,6 +6,7 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
+import { Characteristics } from 'src/characteristics/characteristics.model';
 import { Category } from '../category/category.model';
 import { User } from '../user/user.model';
 
@@ -33,4 +34,11 @@ export class Product extends Model {
 
   @BelongsTo(() => User)
   user: User;
+
+  @ForeignKey(() => Characteristics) 
+  @Column
+  attributesId: number;
+
+  @BelongsTo(() => Characteristics) 
+  attributes: Characteristics;
 }

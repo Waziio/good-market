@@ -8,6 +8,8 @@ import { Category } from './category/category.model';
 import { ProductModule } from './product/product.module';
 import { Product } from './product/product.model';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CharacteristicsModule } from './characteristics/characteristics.module';
+import { Characteristics } from './characteristics/characteristics.model';
 
 export const config = new ConfigService();
 
@@ -21,7 +23,7 @@ export const config = new ConfigService();
       username: config.get('DB_USER'),
       password: config.get('DB_PASSWORD'),
       database: config.get('DB_NAME'),
-      models: [User, Category, Product],
+      models: [User, Category, Product, Characteristics],
       autoLoadModels: true,
       synchronize: true,
       retryAttempts: 3,
@@ -30,6 +32,7 @@ export const config = new ConfigService();
     UserModule,
     CategoryModule,
     ProductModule,
+    CharacteristicsModule,
   ],
 })
 export class AppModule {}
