@@ -1,7 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { GetAllUsersDto } from './dto/getAllUsersDto';
+import { ResetPwdDto } from './dto/resetPwdDto';
 import { User } from './user.model';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -40,6 +42,21 @@ export class UsersService {
 
   async create(user: any) {
     await this.userModel.create(user);
+  }
+
+  async resetPwd(id: number, resetPwdDto: ResetPwdDto) {
+    const { old_password, new_password } = resetPwdDto;
+
+    // Check if old password is correct
+    const { password } = await this.userModel.findByPk(id);
+
+    if (bcrypt.compare(old_password, password)) {
+      // update password
+      const hash = await bcrypt.hash(new_password, 10);
+      await this.userModel.update({ password: hash }, { where: { id: id } });
+
+      return { message: 'Success !' };
+    }
   }
 
   async delete(id: number): Promise<Object> {

@@ -1,2 +1,4 @@
-node_modules
-dist
+Back/node_modules
+Back/dist
+Back/.env
+Back/.env
