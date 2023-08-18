@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { Category } from '../category/category.model';
-import { User } from '../users/user.model';
+import { User } from '../user/user.model';
 
 @Table
 export class Product extends Model {

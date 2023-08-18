@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AuthModule } from './auth/auth.module';
-import { User } from './users/user.model';
-import { UsersModule } from './users/users.module';
+import { User } from './user/user.model';
+import { UserModule } from './user/user.module';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/category.model';
 import { ProductModule } from './product/product.module';
@@ -27,7 +27,7 @@ export const config = new ConfigService();
       retryAttempts: 3,
     }),
     AuthModule,
-    UsersModule,
+    UserModule,
     CategoryModule,
     ProductModule,
   ],

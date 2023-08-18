@@ -1,11 +1,21 @@
-import { Controller, Get, Param, Query, Delete, Post, Body, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  Delete,
+  Post,
+  Body,
+  Put,
+} from '@nestjs/common';
 import { GetAllUsersDto } from './dto/getAllUsersDto';
 import { ResetPwdDto } from './dto/resetPwdDto';
-import { UsersService } from './users.service';
+import { UpdateUserDto } from './dto/updateUserDto';
+import { UserService } from './user.service';
 
-@Controller('users')
-export class UsersController {
-  constructor(private readonly user: UsersService) {}
+@Controller('user')
+export class UserController {
+  constructor(private readonly user: UserService) {}
 
   @Get()
   getAll(@Query() getAllUsersDto: GetAllUsersDto) {
@@ -15,6 +25,11 @@ export class UsersController {
   @Get(':id')
   getOne(@Param('id') id: string) {
     return this.user.findOneById(parseInt(id));
+  }
+
+  @Put(':id')
+  update(@Param('id') id: string,@Body() updateUserDto: UpdateUserDto) {
+    return this.user.update(parseInt(id), updateUserDto);
   }
 
   @Put(':id/reset')

@@ -1,12 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { GetAllUsersDto } from './dto/getAllUsersDto';
 import { ResetPwdDto } from './dto/resetPwdDto';
 import { User } from './user.model';
 import * as bcrypt from 'bcrypt';
+import { UpdateUserDto } from './dto/updateUserDto';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(@InjectModel(User) private userModel: typeof User) {}
 
   async findAll(getAllUsersDto: GetAllUsersDto): Promise<User[]> {
@@ -40,8 +45,36 @@ export class UsersService {
     return this.userModel.findOne({ where: { email: email } });
   }
 
+  async findOneByUsername(username: string): Promise<User> {
+    return this.userModel.findOne({ where: { username: username } });
+  }
+
   async create(user: any) {
     await this.userModel.create(user);
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    // Check if email doesn't exist
+    if (updateUserDto.email) {
+      const isEmailExist = await this.userModel.findOne({
+        where: { email: updateUserDto.email },
+      });
+
+      if (isEmailExist) throw new ConflictException();
+    }
+
+    // Check if uername doesn't exist
+    if (updateUserDto.username) {
+      const isUsernameExist = await this.userModel.findOne({
+        where: { username: updateUserDto.username },
+      });
+
+      if (isUsernameExist) throw new ConflictException();
+    }
+
+    // Update user
+    await this.userModel.update(updateUserDto, { where: { id: id } });
+    return { message: 'Success !' };
   }
 
   async resetPwd(id: number, resetPwdDto: ResetPwdDto) {

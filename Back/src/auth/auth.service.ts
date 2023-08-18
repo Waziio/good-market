@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+import { UserService } from 'src/user/user.service';
 import { SignupDto } from './dto/signupDto';
 import {
   ConflictException,
@@ -11,13 +11,14 @@ import { SigninDto } from './dto/signinDto';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService) {}
+  constructor(private userService: UserService) {}
 
   async signup(signup: SignupDto) {
     const { email, username, password } = signup;
-    const user = await this.userService.findOneByEmail(email);
+    const isEmailExist = await this.userService.findOneByEmail(email);
+    const isUsernameExist = await this.userService.findOneByUsername(username);
     // If user (email) already exist
-    if (user) throw new ConflictException();
+    if (isEmailExist || isUsernameExist) throw new ConflictException();
     const hash = await bcrypt.hash(password, 10);
     await this.userService.create({
       email: email,
