@@ -8,17 +8,28 @@ export class ProductService {
   constructor(@InjectModel(Product) private product: typeof Product) {}
 
   async getAll(getProductsDto: GetProductsDto) {
-    const { category, name } = getProductsDto;
+    const { categoryId, name } = getProductsDto;
     let filter = { where: {} };
 
-    if (category) {
-      filter['where'][category] = category;
+    if (categoryId) {
+      filter['where']["categoryId"] = categoryId;
     }
 
     if (name) {
-      filter['where'][name] = name;
+      filter['where']["name"] = name;
     }
+    console.log(filter)
 
     return this.product.findAll(filter);
+  }
+
+  async create(createProductDto: any) {
+    const product = await this.product.create(createProductDto);
+    return { message: 'Success !', product: product };
+  }
+
+  async delete(id: number) {
+    await this.product.destroy({ where: { id: id } });
+    return { message: 'Success !' };
   }
 }

@@ -16,4 +16,7 @@ export class User extends Model {
   @Column({ defaultValue: false, type: DataTypes.BOOLEAN })
   isActive: boolean;
 
+  @HasMany(() => Product, { onDelete: 'CASCADE' })
+  products: Product[]
+
 }

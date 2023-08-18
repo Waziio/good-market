@@ -10,4 +10,7 @@ export class Category extends Model {
     unique: true,
   })
   name: string;
+
+  @HasMany(() => Product)
+  products: Product[]
 }

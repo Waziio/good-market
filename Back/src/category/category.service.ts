@@ -6,8 +6,12 @@ import { Category } from './category.model';
 export class CategoryService {
   constructor(@InjectModel(Category) private category: typeof Category) {}
 
-  async findAll() {
-    return this.category.findAll();
+  async findAll(name?: string) {
+    if (name) {
+      return this.category.findAll({where: {name: name}});
+    } else {
+      return this.category.findAll();
+    }
   }
 
   async findOneById(id: any) {

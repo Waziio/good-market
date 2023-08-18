@@ -5,7 +5,12 @@ import { Category } from './category/category.model';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
 
   // Ajouter les catégories si elles n'existent pas
   const categoriesToAdd = [

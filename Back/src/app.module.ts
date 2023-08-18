@@ -8,6 +8,7 @@ import { Category } from './category/category.model';
 import { ProductModule } from './product/product.module';
 import { Product } from './product/product.model';
 
+
 @Module({
   imports: [
     SequelizeModule.forRoot({
