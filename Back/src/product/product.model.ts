@@ -34,11 +34,4 @@ export class Product extends Model {
 
   @BelongsTo(() => User)
   user: User;
-
-  @ForeignKey(() => Characteristics) 
-  @Column
-  attributesId: number;
-
-  @BelongsTo(() => Characteristics) 
-  attributes: Characteristics;
 }

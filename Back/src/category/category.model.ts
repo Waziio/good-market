@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { Column, Model, Table, HasMany, HasOne } from 'sequelize-typescript';
+import { Column, Model, Table, HasMany } from 'sequelize-typescript';
 import { Characteristics } from 'src/characteristics/characteristics.model';
 import { Product } from 'src/product/product.model';
 
@@ -15,6 +15,6 @@ export class Category extends Model {
   @HasMany(() => Product)
   products: Product[];
 
-  @HasOne(() => Characteristics) 
-  attributes: Characteristics; 
+  @HasMany(() => Characteristics) 
+  characteristics: Characteristics[]; 
 }

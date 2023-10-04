@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Category } from './category.model';
+import { Characteristics } from 'src/characteristics/characteristics.model';
 
 @Injectable()
 export class CategoryService {
@@ -8,14 +9,19 @@ export class CategoryService {
 
   async findAll(name?: string) {
     if (name) {
-      return this.category.findAll({where: {name: name}});
+      return await this.category.findAll({ where: { name: name } });
     } else {
-      return this.category.findAll();
+      return await this.category.findAll();
     }
   }
 
   async findOneById(id: any) {
-    return this.category.findOne({ where: { id: id } });
+    const category = await this.category.findByPk(id, {
+      include: [Characteristics],
+    });
+
+    if (!category) throw new NotFoundException();
+    return category;
   }
 
   async findOneByName(name: string) {
