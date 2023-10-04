@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common/exceptions';
 import * as bcrypt from 'bcrypt';
 import { SigninDto } from './dto/signinDto';
+import { generateJwt } from 'src/utils/utils';
 
 @Injectable()
 export class AuthService {
@@ -46,6 +47,8 @@ export class AuthService {
       updatedAt: user.updatedAt,
     };
 
-    return { user: connected_user };
+    const token = generateJwt(user.id, user.email, user.username);
+
+    return { user: connected_user, jwt: token };
   }
 }

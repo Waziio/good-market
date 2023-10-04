@@ -19,7 +19,6 @@ export class ProductService {
     if (name) {
       filter['where']['name'] = name;
     }
-    console.log(filter);
 
     return this.product.findAll(filter);
   }
