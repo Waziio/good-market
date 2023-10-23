@@ -32,7 +32,7 @@ export class AuthService {
   async signin(signin: SigninDto) {
     const { email, password } = signin;
     const user = await this.userService.findOneByEmail(email);
-    if (!user) throw new NotFoundException();
+    if (!user) throw new NotFoundException("User");
 
     const isValidPassword = await bcrypt.compare(password, user.password);
 
