@@ -5,12 +5,13 @@ import { useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { handleLoginError } from "../error/handleError";
 import { sleep } from "../utils/utils";
+import ToastLogin from "../components/ToastLogin";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const toast = useToast();
+
   const navigate = useNavigate();
 
   const handleLogin = async (email, password) => {
@@ -29,21 +30,15 @@ const Login = () => {
 
   return (
     <>
-      {errorMessage || username
-        ? toast({
-            title: errorMessage ? "Erreur" : "Connexion réussie",
-            description: errorMessage ? errorMessage : `Bienvenue ${username}`,
-            status: errorMessage ? "error" : "success",
-            duration: 5000,
-            position: "top-right",
-            isClosable: false,
-            variant: "solid",
-            onCloseComplete: () => {
-              setUsername("");
-              setErrorMessage("");
-            },
-          })
-        : null}
+      <ToastLogin
+        username={username}
+        errorMessage={errorMessage}
+        onClose={() => {
+          setUsername("");
+          setErrorMessage("");
+        }}
+      ></ToastLogin>
+
       <div id="login-content" className="h-full flex flex-col justify-center items-center">
         <div className="w-full">
           <LoginForm onLogin={handleLogin} loading={loading}></LoginForm>
