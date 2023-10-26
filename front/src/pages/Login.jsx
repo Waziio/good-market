@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
 import axios from "axios";
-import { useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { handleLoginError } from "../error/handleError";
 import { sleep } from "../utils/utils";
